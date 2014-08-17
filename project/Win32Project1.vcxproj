@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2121E1C7-6502-4210-B89D-59A559BFD51B}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Win32Project1</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="src\BG.h" />
+    <ClInclude Include="src\BG2.h" />
+    <ClInclude Include="src\BG3D.h" />
+    <ClInclude Include="src\Command.h" />
+    <ClInclude Include="src\DDSD.h" />
+    <ClInclude Include="src\Define.h" />
+    <ClInclude Include="src\Demo.h" />
+    <ClInclude Include="src\DGCarad9.h" />
+    <ClInclude Include="src\Effect.h" />
+    <ClInclude Include="src\Effect2.h" />
+    <ClInclude Include="src\Font.h" />
+    <ClInclude Include="src\Friend.h" />
+    <ClInclude Include="src\Gauge.h" />
+    <ClInclude Include="src\Hero.h" />
+    <ClInclude Include="src\Hero2.h" />
+    <ClInclude Include="src\JoyScan.h" />
+    <ClInclude Include="src\PolyJoint.h" />
+    <ClInclude Include="src\QDArc.h" />
+    <ClInclude Include="src\Replay.h" />
+    <ClInclude Include="src\ScriptEngine.h" />
+    <ClInclude Include="src\Sound.h" />
+    <ClInclude Include="src\SpriteEX.h" />
+    <ClInclude Include="src\SpriteEXC.h" />
+    <ClInclude Include="src\SpriteEXM.h" />
+    <ClInclude Include="src\SpriteEXU.h" />
+    <ClInclude Include="src\SXLib9.h" />
+    <ClInclude Include="src\SXScene.h" />
+    <ClInclude Include="src\TOBJ.h" />
+    <ClInclude Include="src\TOBJList.h" />
+    <ClInclude Include="src\types.h" />
+    <ClInclude Include="src\Wave.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="Win32Project1.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\BG.cpp" />
+    <ClCompile Include="src\BG2.cpp" />
+    <ClCompile Include="src\BG3D.cpp" />
+    <ClCompile Include="src\Command.cpp" />
+    <ClCompile Include="src\DDSD.cpp" />
+    <ClCompile Include="src\Define.cpp" />
+    <ClCompile Include="src\Demo.cpp" />
+    <ClCompile Include="src\DGCarad9.cpp" />
+    <ClCompile Include="src\JoyScan.cpp" />
+    <ClCompile Include="src\PolyJoint.cpp" />
+    <ClCompile Include="src\QDArc.cpp" />
+    <ClCompile Include="src\Replay.cpp" />
+    <ClCompile Include="src\ScriptEngine.cpp" />
+    <ClCompile Include="src\Sound.cpp" />
+    <ClCompile Include="src\SpriteEX.cpp" />
+    <ClCompile Include="src\SpriteEXC.cpp" />
+    <ClCompile Include="src\SpriteEXM.cpp" />
+    <ClCompile Include="src\SpriteEXU.cpp" />
+    <ClCompile Include="src\SXLib9.cpp" />
+    <ClCompile Include="src\SXScene.cpp" />
+    <ClCompile Include="src\TOBJ.cpp" />
+    <ClCompile Include="src\TOBJList.cpp" />
+    <ClCompile Include="src\Wave.cpp" />
+    <ClCompile Include="Win32Project1.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Win32Project1.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico" />
+    <Image Include="Win32Project1.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
