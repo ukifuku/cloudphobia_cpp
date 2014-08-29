@@ -17,8 +17,8 @@ void PosRoll( f32& _x, f32& _y, f32 _cx, f32 _cy, s32 _R )
 	if(_R != 0 ) {
 		_x  =  _x - _cx;
 		_y  =  _y - _cy;
-		f32 ax  =  _x * costable[_R] - _y * sintable[_R];
-		f32 ay  =  _x * sintable[_R] + _y * costable[_R];
+		f32 ax  =  _x * cost[_R] - _y * sint[_R];
+		f32 ay  =  _x * sint[_R] + _y * cost[_R];
 		_x  =  ax + _cx;
 		_y  =  ay + _cy;
 	}
@@ -231,8 +231,8 @@ glm::vec2 Rot2D( glm::vec2& _vec, s32 _r )
 
 	glm::vec2 result;
 
-	result.x = _vec.x * costable[_r] - _vec.y * sintable[_r];
-	result.y = _vec.x * sintable[_r] + _vec.y * costable[_r];
+	result.x = _vec.x * cost[_r] - _vec.y * sint[_r];
+	result.y = _vec.x * sint[_r] + _vec.y * cost[_r];
 
 	return result;
 }
@@ -279,4 +279,10 @@ s32 BoolToInt( bool _val )
 bool IntToBool( s32 _val )
 {
 	return _val == 0 ? false : true;
+}
+
+glm::vec2 Random2D( f32 k )
+{
+	glm::vec2 result( (f32)random(1000), (f32)random(1000) );
+	return glm::normalize(result) * k;
 }

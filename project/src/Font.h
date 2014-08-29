@@ -161,7 +161,7 @@ public:
 //カーソル管理クラス
 class TCursorList {
 private:
-	vector<TOBJ*>	m_array;
+	vector<TMojiAndGlassCursor*>	m_array;
 	TOBJList* FOwner;
 	s32 	OrgX,OrgY;
 public:
@@ -246,8 +246,8 @@ static const s8 FONTSET_ORANGE[] = {'0','1','2','3','4','5','6','7','8','9',
 
 
 
-#define		KHEROPOS_TOPGAUGE_HIDED = 150;
-#define		KHEROPOS_BOTTOMGAUGE_HIDED = 330;
-#define		KGAUGE_FADESPEED = 24;
-#define		KGAUGE_SHIFTDISTANCE = 56;
-#define		KGAUGE_SHIFTSPEED = 4;
+#define		KHEROPOS_TOPGAUGE_HIDED  150
+#define		KHEROPOS_BOTTOMGAUGE_HIDED  330
+#define		KGAUGE_FADESPEED  24
+#define		KGAUGE_SHIFTDISTANCE  56
+#define		KGAUGE_SHIFTSPEED  4

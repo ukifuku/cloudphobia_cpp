@@ -5,6 +5,8 @@
 #include "glm/gtx/compatibility.hpp"
 #include "QDArc.h"
 #include "TOBJList.h"
+#include "Effect2.h"
+#include "Effect3.h"
 
 void TPolyLine::InitVertices()
 {

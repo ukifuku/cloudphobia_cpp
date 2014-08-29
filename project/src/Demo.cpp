@@ -6,6 +6,7 @@
 #include "PolyJoint.h"
 #include "SpriteEX.h"
 #include "SpriteEXM.h"
+#include "Hero.h"
 #include <fstream>
 
 void TDemoManager::LoadTexture()
@@ -75,13 +76,13 @@ TDemoManager::TDemoManager( TOBJList* owner, s32 _id ) : TOBJ(owner)
 
 	LoadTexture();
 
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,0,640,60,10,bmNormal);
+	MakeSpriteLite(numSpr, 0,0,640,60,10,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctRed);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctBlue);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctGreen);
 
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,420,640,60,10,bmNormal);
+	MakeSpriteLite(numSpr, 0,420,640,60,10,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctRed);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctBlue);
@@ -112,7 +113,7 @@ void TDemoManager::Move()
 	TOBJ::Move();
 
 	if( (Age == 1) && (FOwner->JikiObj != NULL) ) {
-		FOwner->JikiObj->Sprite[1].Move(-230, 240);
+		FOwner->JikiObj->Sprite[1]->Move(-230, 240);
 	}
 
 	if( Start ) {
@@ -121,7 +122,7 @@ void TDemoManager::Move()
 	}
 }
 
-void TDemoManager::MakeSprite( s32 _num, s32 _tex, s32 _x, s32 _y, s32 _z, s32 _w, s32 _h, s32 _tx, s32 _ty, s32 _tw, s32 _th, s32 _cx, s32 _cy, s32 _blend )
+void TDemoManager::MakeSprite(s32 _num, s32 _tex, s32 _x, s32 _y, s32 _z, s32 _w, s32 _h, s32 _tx, s32 _ty, s32 _tw, s32 _th, s32 _cx, s32 _cy, s32 _blend)
 {
 
 	TBlendMode Blend;
@@ -252,7 +253,7 @@ TMovieManager::TMovieManager( TOBJList* owner, s32 _id ) : TOBJ(owner)
 	StopRequested = false;
 
 	//•”wŒi
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,0,640,480,0,bmNormal);
+	MakeSpriteLite(numSpr, 0,0,640,480,0,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctRed);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0, ctBlue);

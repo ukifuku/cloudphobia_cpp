@@ -179,11 +179,24 @@ void TJoint::RotateKeepR( s32 _r )
 	Spr->RotateR(_r);
 }
 
-void TJoint::Add( TJoint* _child )
+u32 TJoint::Add( TJoint* _child )
 {
 	if( _child )
 	{
 		m_children.push_back(_child);
+		return m_children.size()-1;
+	}
+
+	return 0;
+}
+
+void TJoint::Delete( TJoint* _child )
+{
+	for( JointArray::iterator itr = m_children.begin(); itr != m_children.end(); ++itr ) {
+		if( *itr != NULL ) {
+			m_children.erase(itr);
+			break;
+		}
 	}
 }
 

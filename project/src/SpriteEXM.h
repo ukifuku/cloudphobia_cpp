@@ -10,8 +10,7 @@ protected:
 	TBlendMode FBMCHFlg;   			// BlendModeの変更の検知に使用
 	bool FSmoothCHFlg;      		    // Smoothフラグの変更の検知に使用
 	TDGTexture* FTexCHFlg;         	// Textureの変更の検知に使用
-	f32 	FX;					// カメラ座標
-	f32 	FY;                 	//     〃
+
 	s16 	FCX; 				// カメラの基準点
 	s16	FCY;                 //       〃
 	f32	FZX;                   // カメラの拡大率
@@ -53,8 +52,8 @@ public:
 	bool	FSmooth	;  				// スムージングフラグ
 	bool	FColorKey;
 	D3DCOLOR	FClearColor;					// 画面消去の色
-	//property X			: Single		read FX;//			write FX;
-	//property Y			: Single		read FY;//			write FY;
+	f32 	FX;					// カメラ座標
+	f32 	FY;                 	//     〃
 	//property CX			: Smallint		read FCX		write FCX;
 	//property CY			: Smallint		read FCY     	write FCY;
 	//property R			: WORD			read FR;
@@ -75,6 +74,10 @@ public:
 	//              property BlurTex2       : TDGTexture            read FBlurTex2;
 	TDGTexture*		GetAlphaEffectTex() { return FAlphaEffectTex; }
 	TDGTexture*		GetAddEffectTex() { return FAddEffectTex; }
+	TDGTexture*		GetBloomTex1() { return FTempTex1; }
+	TDGTexture*		GetBloomTex2() { return FTempTex2; }
+	TDGTexture*		GetBlurTex1() { return FBlurTex1; }
+	TDGTexture*		GetBlurTex2() { return FBlurTex2; }
 	TSpriteEXManager(TDGCarad& _dd, bool _bump, bool _bloom);       			// コンストラクタ
 	~TSpriteEXManager();       		 	// デストラクタ
 	void AddSprite(TSpriteBase* _spr); 	// スプライト登録

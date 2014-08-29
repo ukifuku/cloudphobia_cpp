@@ -19,6 +19,7 @@ class TSoundEffect;
 class TMusicPlayer;
 class TReplay;
 class TSpriteBase;
+class TJikiBase;
 
 //オブジェクト管理クラス
 class	TOBJList {
@@ -142,7 +143,7 @@ public:
 	bool	DemoON;
 	s32		DemoNumber;
 
-	TOBJ*	JikiObj;     //自機オブジェクトのポインタ
+	TJikiBase*	JikiObj;     //自機オブジェクトのポインタ
 
 	bool	AcceptChangeSpeed;    //スクロールスピード変更をMain側で行うか
 	s32		RequestedSpeedFromChild;    //外部からスピード変更依頼を受ける場合の値

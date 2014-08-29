@@ -18,8 +18,8 @@ typedef unsigned short	u16;
 typedef int				s32;
 typedef unsigned int	u32;
 
-typedef long			s64;
-typedef unsigned long	u64;
+typedef __int64			s64;
+typedef unsigned __int64	u64;
 
 typedef bool			b8;
 
@@ -27,6 +27,18 @@ typedef char			c8;
 
 typedef float			f32;
 typedef double			f64;
+
+template<typename T>
+void Inc(T x) { x++; }
+
+template<typename T>
+void Dec(T x) { x--; }
+
+template<typename T>
+void Inc(T x, T y) { x += y; }
+
+template<typename T>
+void Dec(T x, T y) { x -= y; }
 
 struct Rect
 {

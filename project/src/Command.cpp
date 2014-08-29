@@ -14,6 +14,7 @@
 #include "Friend.h"
 #include "BG2.h"
 #include "BG3D.h"
+#include "MultiThread.h"
 
 TGameOver::TGameOver( TOBJList* owner, s32 _dp ) : TOBJ(owner)
 {
@@ -30,7 +31,7 @@ TGameOver::TGameOver( TOBJList* owner, s32 _dp ) : TOBJ(owner)
 	CursorList =  new TCursorList(FOwner);
 
 	//母艦ダメージアイコン
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,0,112,80,100,bmNormal);
+	MakeSpriteLite(numSpr, 0,0,112,80,100,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(GaugeTex, 289, 225, 400, 304);
 	Sprite[numSpr-1]->GetSpr()->FCX += 56;
 	Sprite[numSpr-1]->GetSpr()->FCY += 40;
@@ -3270,10 +3271,10 @@ TWeaponSelect::TWeaponSelect( TOBJList* owner ) : TOBJ(owner)
 	FOwner->Add(BustShot_Rifle);
 	FOwner->Add(BustShot_Blade);
 
-	MakeSpriteLite(FOwner->GetDG(), 0,640,56,384,80,200,bmNormal);     //ライフルの名前
+	MakeSpriteLite(0, 640,56,384,80,200,bmNormal);     //ライフルの名前
 	Sprite[0]->GetSpr()->AddTexture(BShotTex1, 128, 1, 511, 79);
 	Sprite[0]->GetSpr()->FSmooth  =  false;
-	MakeSpriteLite(FOwner->GetDG(),1,640,56,384,80,200,bmNormal);     //刀の名前
+	MakeSpriteLite(1,640,56,384,80,200,bmNormal);     //刀の名前
 	Sprite[1]->GetSpr()->AddTexture(BShotTex2, 128, 1, 511, 79);
 	Sprite[1]->GetSpr()->FSmooth  =  false;
 
@@ -5036,11 +5037,7 @@ TStage1StartingDemo::TStage1StartingDemo( TOBJList* owner ) : TOBJ(owner)
 		friends[i] = NULL;
 	}
 
-	if( FOwner->HeroWeapon == 0 )
-		((TJiki*)FOwner->JikiObj)->BoostSoon(true);
-	else
-		((TJiki2*)FOwner->JikiObj)->BoostSoon(true);
-
+	FOwner->JikiObj->BoostSoon(true);
 	FOwner->JikiObj->Sprite[1]->MoveR(-496,0);
 
 	ButtonFlg_local = true;
@@ -5494,17 +5491,11 @@ void TStage4StartingDemo::Move()
 	case 1:
 		{
 			FOwner->AfterLoopEvent = MReady;
-			if( FOwner->HeroWeapon == 0 )
-				((TJiki*)FOwner->JikiObj)->BoostSoon(true);
-			else
-				((TJiki2*)FOwner->JikiObj)->BoostSoon(true);
+			FOwner->JikiObj->BoostSoon(true);
 		}break;
 	case 150:
 		{
-			if( FOwner->HeroWeapon == 0 )
-				((TJiki*)FOwner->JikiObj)->BoostByOther(false);
-			else
-				((TJiki2*)FOwner->JikiObj)->BoostByOther(false);
+			FOwner->JikiObj->BoostByOther(false);
 		}break;
 	case 151:
 		Die();
@@ -5599,11 +5590,7 @@ void TStage4EndingDemo::Move()
 			if( Age % 600 == 0 )
 				if( CreateSE ) FOwner->SoundEffect->WavPlay2(WABaseExp, 10, 150);
 			if( FOwner->Distance >= 64300 ) {
-				if( FOwner->HeroWeapon == 0 )
-					((TJiki*)FOwner->JikiObj)->BoostByOther(false);
-				else
-					((TJiki2*)FOwner->JikiObj)->BoostByOther(false);
-
+				FOwner->JikiObj->BoostByOther(false);
 				ActFlg++;
 			}
 		}break;
@@ -5770,7 +5757,7 @@ TStageSelectScreenMng::TStageSelectScreenMng( TOBJList* owner ) : TOBJ(owner)
 	CurrentStage = 0;
 
 	if( ExtraEffects ) {
-		MakeSpriteLite(FOwner->GetDG(), 0,0,0,700,540,15000,bmNormal);     //反射
+		MakeSpriteLite(0, 0,0,700,540,15000,bmNormal);     //反射
 		//反射スプライト設定
 		//      AddTexture(Eff1Tex, 17, 1, 31, 15);
 		Sprite[0]->GetSpr()->AddTexture(Eff1Tex, 65, 81, 112, 128);
@@ -6066,31 +6053,31 @@ TTitle2::TTitle2( TOBJList* owner ) : TOBJ(owner)
 	CursorList = new TCursorList(FOwner);
 
 	//黒シート（上）
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,0,640,256,150,bmNormal);
+	MakeSpriteLite(numSpr, 0,0,640,256,150,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctRed);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctBlue);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctGreen);
 
 	//黒シート（下）
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,432,640,64,150,bmNormal);
+	MakeSpriteLite(numSpr, 0,432,640,64,150,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctRed);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctBlue);
 	Sprite[numSpr-1]->GetSpr()->SetColor(0,ctGreen);
 
 	//タイトル
-	MakeSpriteLite(FOwner->GetDG(), numSpr,0,224,240,32,140,bmNormal);
+	MakeSpriteLite(numSpr, 0,224,240,32,140,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(GaugeTex, 129, 337, 368, 368);
 	Sprite[0]->Add(Sprite[numSpr-1]);
 
 	//タイトル2
-	MakeSpriteLite(FOwner->GetDG(), numSpr,240,224,224,32,140,bmNormal);
+	MakeSpriteLite(numSpr, 240,224,224,32,140,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(GaugeTex, 129, 369, 351, 400);
 	Sprite[0]->Add(Sprite[numSpr-1]);
 
 	//選択項目の背景
-	MakeSpriteLite(FOwner->GetDG(), numSpr,189,245,370,320,210,bmNormal);
+	MakeSpriteLite(numSpr, 189,245,370,320,210,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(DemoTex, 81, 129, 255, 255);
 	Sprite[numSpr-1]->GetSpr()->Rotate(1024);
 	Sprite[numSpr-1]->GetSpr()->SetColor(160,ctAlpha);
@@ -6100,7 +6087,7 @@ TTitle2::TTitle2( TOBJList* owner ) : TOBJ(owner)
 	Sprite[0]->Add(Sprite[numSpr-1]);
 
 	//カーソル
-	MakeSpriteLite(FOwner->GetDG(), numSpr,-16,224,320,32,205,bmNormal);
+	MakeSpriteLite(numSpr, -16,224,320,32,205,bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(GaugeTex, 161, 417, 320, 448);
 	CursorZoom = 0.01f;
 	Sprite[numSpr-1]->GetSpr()->Zoom(CursorZoom,1);
@@ -6338,7 +6325,7 @@ TFadeOuttoNextStage::TFadeOuttoNextStage( TOBJList* owner ) : TOBJ(owner)
 	FObjectName = "TFadeOuttoNextStage";
 	FKind = kGauge;
 	//ブラックアウト
-	MakeSpriteLite(FOwner->GetDG(), 0,0,0,640,480,0,bmNormal);
+	MakeSpriteLite(0, 0,0,640,480,0,bmNormal);
 	Sprite[0]->GetSpr()->AddTexture(Eff1Tex, 17, 1, 31, 15);
 	Sprite[0]->GetSpr()->SetColor(0, ctRed);
 	Sprite[0]->GetSpr()->SetColor(0, ctBlue);
@@ -6445,7 +6432,7 @@ TDifficultySelect::TDifficultySelect( TOBJList* owner ) : TOBJ(owner)
 	//スター
 	for( u32 i = 0; i <= 2; i++ ) {
 		if( FOwner->IsCleared[i][0] || FOwner->IsCleared[i][1] ) {
-			MakeSpriteLite(FOwner->GetDG(), numSpr,0,0,48,48,99,bmNormal);
+			MakeSpriteLite(numSpr, 0,0,48,48,99,bmNormal);
 			if( FOwner->IsCleared[i, 0] && FOwner->IsCleared[i, 1] )
 				Sprite[numSpr-1]->GetSpr()->AddTexture(DemoTex, 257, 1, 304, 48);
 			else if( FOwner->IsCleared[i][0] )

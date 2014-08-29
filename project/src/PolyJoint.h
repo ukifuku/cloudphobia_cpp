@@ -28,6 +28,7 @@ public:
 public:
     TJoint* Objs( u32 _id ) { return _id < m_children.size() ? m_children[_id] : NULL; } 
 	TSpriteEX* GetSpr() { return Spr; }
+	s32 GetSize() { return m_children.size(); } 
 
     TJoint( const TSpriteEXBLT& _blt );
     virtual ~TJoint();
@@ -47,7 +48,8 @@ public:
     virtual void MonoRotate( s32 _r );
     virtual void RotateKeep( s32 _r );
     virtual void RotateKeepR( s32 _r );
-	virtual void Add( TJoint* _child );
+	virtual u32 Add( TJoint* _child );
+	virtual void Delete( TJoint* _child );
 };
 
 

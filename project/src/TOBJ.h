@@ -49,8 +49,8 @@ public:
 public:
 	TOBJ( TOBJList* _owner );
 	virtual ~TOBJ();
-	virtual void MakeSprite( TDGCarad& _dddd, TDGTexture& _Tex, s32 _num, s32 TX, s32 TY, s32 TW, s32 TH, s32 Z, s32 HX, s32 HY, s32 HW, s32 HH, s32 _cx, s32 _cy, bool com );
-	virtual void MakeSpriteLite( TDGCarad* _dddd, s32 _num, s32 _x, s32 _y, s32 _w, s32 _h, s32 _z, TBlendMode _blend );
+	virtual void MakeSprite( TDGCarad* _dddd, TDGTexture* _Tex, s32 _num, s32 TX, s32 TY, s32 TW, s32 TH, s32 Z, s32 HX, s32 HY, s32 HW, s32 HH, s32 _cx, s32 _cy, bool com );
+	virtual void MakeSpriteLite( s32 _num, s32 _x, s32 _y, s32 _w, s32 _h, s32 _z, TBlendMode _blend );
 	virtual bool CheckTouch( TOBJ* Target );
 	virtual void Move();
 	virtual void OnDamaged( TOBJ* Target );
@@ -68,7 +68,7 @@ public:
 	virtual void OnDeviceLost(); 
 	virtual void OnDeviceReset(); 
 	virtual s32 GetAge();
-	virtual void MakeSprFromID( TDGCarad& _dddd, s32 _id, TDGTexture& _tex, s32 _z, bool _extra );
+	virtual void MakeSprFromID( TDGCarad* _dddd, s32 _id, TDGTexture* _tex, s32 _z, bool _extra );
 	virtual void MotionControl( s32 _id );
 	virtual void MotionControlSoon( s32 _id );
 	virtual void CollisionReaction( f32 _x, f32 _y );

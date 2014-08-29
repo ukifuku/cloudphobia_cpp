@@ -13,7 +13,6 @@ class TFriend : public TJiki {
     s32 ActionID;
     s32 BoostLV_friend;
     TJoint* OwnerSprite;     //他のスプライトの多関節に組み込む場合の、親スプライト
-    s32 SonID;          //親スプライトに何番目の子として登録されたか
   public:
     TFriend(TOBJList* owner, s32 _x, s32 _y, f32 _zoom, s32 _type);
     void Move(); 
@@ -31,7 +30,6 @@ class TFriend : public TJiki {
 class TBeamFlag : public TOBJ {
   protected:
     TJoint* OwnerSprite;     //他のスプライトの多関節に組み込む場合の、親スプライト
-    s32 SonID;          //親スプライトに何番目の子として登録されたか
   public:
     TBeamFlag(TOBJList* owner, s32 _x, s32 _y, f32 _zoom, TJoint* _spr );
     void Move(); 
@@ -69,10 +67,11 @@ class TFriend2 : public TOBJ {
     void Disappear();
     void DoAction(s32 _num);
     void BladeMotion();
-    //行動番号
-    static const s32 KACTION_BLADE = 0;
+
   };
 
   //行動番号
 #define		KACTION_FRIEND_BOOST	1
 #define		KACTION_FRIEND_FLAG		2
+//行動番号
+#define		KACTION_BLADE			0

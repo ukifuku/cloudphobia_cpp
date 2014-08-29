@@ -1270,6 +1270,11 @@ TSXFrame* TSXFrame::Children( u32 _idx )
 	return FChildren->GetItem(_idx);
 }
 
+void TSXFrame::ClearChildren()
+{
+	FChildren->Clear();
+}
+
 TSXFrame* TSXFrameList::GetFrame( s32 idx )
 {
 	return m_frame[idx];

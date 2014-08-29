@@ -12,6 +12,16 @@
 #include "Sound.h"
 #include "SXScene.h"
 #include "BG3D.h"
+#include "Hero.h"
+#include "Hero2.h"
+#include "Command.h"
+#include "Gauge.h"
+#include "Effect.h"
+#include "Effect2.h"
+#include "Demo.h"
+#include "Missile.h"
+#include "Font.h"
+#include "Zako01.h"
 
 #define ITERATE  for( objlist_itr itr = m_objList.begin(); itr != m_objList.end(); ++itr ) 
 
@@ -376,7 +386,7 @@ void TOBJList::SetStage( s8 StageNum )
 	case 1:{
 		Add(new TSea(this,0,3));  //海
 		Add(new TUnderSea(this));  //
-		Add(new TDawnCloud(this));  //雲
+		Add(new TDawncloud(this));  //雲
 		CameraReset();
 		m_Scene->SetFog(0x00ee3390, 5, 20);
 
@@ -425,7 +435,7 @@ void TOBJList::SetStage( s8 StageNum )
 		if( (DebugMode && (SequenceTotalTime == 0)) || IsPractice ) InitPlayerGauge();
 		   }break;
 	case 3:{
-		BG3DMan->ResetFrameList;
+		BG3DMan->ResetFrameList();
 		Script->UnDone(KSCRIPT_STAGE4ENEMY);
 		Script->UnDone(KSCRIPT_STAGE4ENEMY_EASY);
 		Script->UnDone(KSCRIPT_STAGE4ENEMY_NORMAL);
@@ -442,7 +452,7 @@ void TOBJList::SetStage( s8 StageNum )
 		if( (DebugMode && (SequenceTotalTime == 0)) || IsPractice ) InitPlayerGauge();
 		   }break;
 	case 4:{
-		BG3DMan->ResetFrameList;
+		BG3DMan->ResetFrameList();
 		Script->UnDone(KSCRIPT_STAGE5ENEMY);
 		Add(new TSandStorm(this,0,0));
 		m_Scene->SetFog(0xff9f4242, 2, 10);
@@ -472,7 +482,7 @@ void TOBJList::SetStage( s8 StageNum )
 	case 98:{
 		DemoMan  = new TDemoManager(this, 1);
 		Add(DemoMan);
-		((TDemoManager*)DemoMan)->DemoStart;
+		((TDemoManager*)DemoMan)->DemoStart();
 		Script->UnDone(KSCRIPT_STAGE5DEMO);
 		if( CreateBGM ) {
 			MusicPlayer->PlayOnce(0);
@@ -480,7 +490,7 @@ void TOBJList::SetStage( s8 StageNum )
 		InitPlayerGauge();
 			}break;
 	case 99:{
-		BG3DMan->ResetFrameList;
+		BG3DMan->ResetFrameList();
 		Add(new TSky_StageSelect(this));  //背景
 		Add(new TCloudMaker(this,0));
 		Add(new TCloudMaker4(this,0));
@@ -965,7 +975,7 @@ void TOBJList::OnAfterLoop()
 		}break;
 	case MPlayStart:
 		{
-			if( CreateBGM ) MusicPlayer->Stop;
+			if( CreateBGM ) MusicPlayer->Stop();
 			GameStart();
 			PlayStart();
 			Add(new TBoxContrl(this,7));
@@ -1103,7 +1113,7 @@ TOBJList::TOBJList( TDGCarad* _dddd )
 		OBJIDList[i] = 0;
 
 	D3DCAPS9 d3dCaps;
-	QD->Get3DDevice()->GetDeviceCaps( &d3dCaps );
+	m_dddd->Get3DDevice()->GetDeviceCaps( &d3dCaps );
 
 	//バンプマップをサポートしているか
 	if( d3dCaps.TextureOpCaps && ( D3DTEXOPCAPS_BUMPENVMAP || D3DTEXOPCAPS_BUMPENVMAPLUMINANCE ) == 0 ) 
@@ -1114,7 +1124,7 @@ TOBJList::TOBJList( TDGCarad* _dddd )
 
 	SpriteEXInitialize();
 
-	Scene = new TSceneManager(QD);
+	m_Scene = new TSceneManager(m_dddd);
 
 	// スプライトマネージャの生成
 	if( ExtraEffects )
@@ -1122,20 +1132,20 @@ TOBJList::TOBJList( TDGCarad* _dddd )
 	else
 		Blooming = false;
 
-	m_SprMan  = new TSpriteEXManager(QD,ExtraEffects, Blooming);
-	m_SprMan->SetAspect( (f32)QD->GetBackBufferWidth() / 640.f, (f32)QD->GetBackBufferHeight() / 480.f);
+	m_SprMan  = new TSpriteEXManager(*m_dddd,ExtraEffects, Blooming);
+	m_SprMan->SetAspect( (f32)m_dddd->GetBackBufferWidth() / 640.f, (f32)m_dddd->GetBackBufferHeight() / 480.f);
 
 	// テクスチャの生成
-	JikiTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //自機
-	FontTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //フォント
-	FontTex_Gothic = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //フォント
-	Eff1Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED); //エフェクト
-	Eff2Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED); //
-	Eff4Tex = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);    //
-	Eff5Tex = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);      //
-	Eff8Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-	Eff9Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-	GaugeTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+	JikiTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //自機
+	FontTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //フォント
+	FontTex_Gothic = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);     //フォント
+	Eff1Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED); //エフェクト
+	Eff2Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED); //
+	Eff4Tex = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);    //
+	Eff5Tex = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);      //
+	Eff8Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+	Eff9Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+	GaugeTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
 
 	BG3DMan = NULL;
 
@@ -1148,7 +1158,7 @@ TOBJList::TOBJList( TDGCarad* _dddd )
 	CDownTick = 0;
 
 	Replayer = new TReplay();
-	REplayON = false;
+	ReplayON = false;
 
 	Network = new TIdHTTP();
 	NetworkID = "";
@@ -1360,9 +1370,9 @@ TOBJList::~TOBJList()
 		SAFE_DELETE(*itr);
 	}
 
-	QD->Get3DDevice()->SetTexture(0, NULL);     // テクスチャを取り外す
-	QD->Get3DDevice()->SetTexture(1, NULL);     // テクスチャを取り外す
-	QD->Get3DDevice()->SetTexture(2, NULL);     // テクスチャを取り外す
+	m_dddd->Get3DDevice()->SetTexture(0, NULL);     // テクスチャを取り外す
+	m_dddd->Get3DDevice()->SetTexture(1, NULL);     // テクスチャを取り外す
+	m_dddd->Get3DDevice()->SetTexture(2, NULL);     // テクスチャを取り外す
 	SAFE_DELETE(m_SprMan);
 	SAFE_DELETE(JikiTex);
 	SAFE_DELETE(Eff1Tex);
@@ -1688,7 +1698,7 @@ void TOBJList::Move()
 
 			if( LimitTime>10000 ) CDownTick = FTick;
 
-			if( (LimitTime<=10000) && ((FTick-CDownTick) % 60==0) && CreateSE ) SoundEffect->WavPlay(WAHeart,14);
+			if( (LimitTime<=10000) && ((FTick-CDownTick) % 60==0) && CreateSE ) SoundEffect->WavPlay(WAheart,14);
 
 			if( LimitTime<=0 ) LimitTime = 0;
 
@@ -1726,8 +1736,8 @@ void TOBJList::Move()
 	//IDとOBJList中の番号とを関連付け
 	u32 i=0;
 	for ( objlist_itr itr = m_objList.begin(); itr != m_objList.end(); ++i, ++itr ) {
-		if( ((*itr)->ID < 4096) && ((*itr)->ID >= 0) )
-			OBJIDList[(*itr)->ID] = i;
+		if( ((*itr)->ID() < 4096) && ((*itr)->ID() >= 0) )
+			OBJIDList[(*itr)->ID()] = i;
 	}
 
 
@@ -1741,18 +1751,18 @@ void TOBJList::Move()
 	ITERATE {
 			if( ! (*itr)->FDead ) {
 			if( TimeStop ) {
-				if( ((*itr)->Kind==kGauge) ) (*itr)->Move();
+				if( ((*itr)->Kind()==kGauge) ) (*itr)->Move();
 			}
 			else {
 				//自機スピードに応じて相対速度変化
-				if( ((*itr)->Kind == kEnemy) || ((*itr)->Kind == kEShot) || ((*itr)->Kind == kMissile)  || ((*itr)->Kind == kEffect) || ((*itr)->Kind == kFunnel) || ((*itr)->Kind == kEffect4) || ((*itr)->Kind == kColBG) ) {
+				if( ((*itr)->Kind() == kEnemy) || ((*itr)->Kind() == kEShot) || ((*itr)->Kind() == kMissile)  || ((*itr)->Kind() == kEffect) || ((*itr)->Kind() == kFunnel) || ((*itr)->Kind() == kEffect4) || ((*itr)->Kind() == kColBG) ) {
 					if( ((*itr)->Sprite[(*itr)->Sprite_Center] != NULL) && (Speed>0) )
 						(*itr)->Sprite[(*itr)->Sprite_Center]->MoveR(-Speed + KSCROLLSPEED_NORMAL, 0);
 				}
 
 				//背景につられて移動
-				if( ((*itr)->Kind == kEnemy) || ((*itr)->Kind == kEShot) || ((*itr)->Kind == kEffect) ||
-					((*itr)->Kind == kBG) || ((*itr)->Kind == kColBG) || ((*itr)->Kind == kMissile) || ((*itr)->Kind == kEffect4) ) {
+				if( ((*itr)->Kind() == kEnemy) || ((*itr)->Kind() == kEShot) || ((*itr)->Kind() == kEffect) ||
+					((*itr)->Kind() == kBG) || ((*itr)->Kind() == kColBG) || ((*itr)->Kind() == kMissile) || ((*itr)->Kind() == kEffect4) ) {
 						if( ((*itr)->Sprite[(*itr)->Sprite_Center] != NULL) )
 							(*itr)->Sprite[(*itr)->Sprite_Center]->MoveR(BGSlide.X, BGSlide.Y);
 				}
@@ -1767,7 +1777,7 @@ void TOBJList::Move()
 
 
 	//各種情報表示
-	if( (GameMode = gPlay) && (! DemoON)  ) Console();
+	if( (GameMode == gPlay) && (! DemoON)  ) Console();
 
 	if( (! ReplayON) && ((GameMode == gPlay) || (GameMode == gReady))  && (! DemoON) )
 		Replayer->Rec(FTick);
@@ -1793,7 +1803,7 @@ void TOBJList::Render()
 {
 	if( ExtraEffects ) Add(new TDummy(this,9100));    //レンズエフェクト用にダミースプライトを追加
 	if( ExtraEffects ) Add(new TDummy(this,17100));
-	{if( Blooming ) }Add(new TDummy(this,2100));
+	Add(new TDummy(this,2100));
 	Add(new TDummy(this,300));
 	Add(new TDummy(this,51200));
 	Add(new TDummy(this,25601));
@@ -1811,7 +1821,7 @@ void TOBJList::Render()
 	}
 
 	// 描画開始を宣言
-	QD->Get3DDevice()->BeginScene();
+	m_dddd->Get3DDevice()->BeginScene();
 
 	m_SprMan->FSmooth  =  FilterON;
 	m_SprMan->Sort();            // スプライトのソート
@@ -1829,8 +1839,8 @@ void TOBJList::Render()
 
 	if( ShowHit ) m_SprMan->RenderHitArea();
 	//描画終了の宣言
-	QD->Get3DDevice()->EndScene();
-	QD->Get3DDevice()->Present(NULL,NULL,0,NULL); // フリップ
+	m_dddd->Get3DDevice()->EndScene();
+	m_dddd->Get3DDevice()->Present(NULL,NULL,0,NULL); // フリップ
 
 	if(GameMode == gPlay ) TotalRendCount++;
 
@@ -2028,7 +2038,7 @@ void TOBJList::LockOn( s32 setNumber )
 
 	//全オブジェクトから敵オブジェクトだけを抽出
 	ITERATE{
-		if( (*itr)->Kind == kEnemy ) {
+		if( (*itr)->Kind() == kEnemy ) {
 			TargetList.push_back(*itr);
 			s32 DX = HeroPos.X-(*itr)->X;
 			s32 DY = HeroPos.Y-(*itr)->Y;
@@ -2047,10 +2057,10 @@ void TOBJList::LockOn( s32 setNumber )
 			s32 TempHP = Target->HP;
 			while( TempHP > 0 ) {
 				if( Lnumber >= MaxLock ) break;
-				LockID[Lnumber+MaxLock*setNumber] = Target->ID;
+				LockID[Lnumber+MaxLock*setNumber] = Target->ID();
 				BeLocked[Lnumber+MaxLock*setNumber].X = Target->X;
 				BeLocked[Lnumber+MaxLock*setNumber].Y = Target->Y;
-				TempHP -= MissileSTR-Target->Def;
+				TempHP -= MissileSTR-Target->Def();
 				Add(new TMarker(this,Lnumber+MaxLock*setNumber));//マーカー出現
 				UnLock[Lnumber+MaxLock*setNumber] = false;
 				Lnumber++;
@@ -2070,7 +2080,7 @@ void TOBJList::LockOn2( s32 setNumber, s32 MisNumber )
 
 	//全オブジェクトから敵オブジェクトだけを抽出
 	ITERATE{
-		if( (*itr)->Kind == kEnemy ) {
+		if( (*itr)->Kind() == kEnemy ) {
 			TargetList.push_back(*itr);
 			s32 DX = HeroPos.X-(*itr)->X;
 			s32 DY = HeroPos.Y-(*itr)->Y;
@@ -2087,10 +2097,10 @@ void TOBJList::LockOn2( s32 setNumber, s32 MisNumber )
 		for( s32 i = 0 ; i < TargetList.size(); i++) {
 			TOBJ* Target = TargetList[i];
 			if( Target->TempHP > 0 ) {
-				LockID[MisNumber+MaxLock*setNumber] = Target->ID;
+				LockID[MisNumber+MaxLock*setNumber] = Target->ID();
 				BeLocked[MisNumber+MaxLock*setNumber].X = Target->X;
 				BeLocked[MisNumber+MaxLock*setNumber].Y = Target->Y;
-				Target->TempHP -= MissileSTR-Target->Def;
+				Target->TempHP -= MissileSTR-Target->Def();
 				Add(new TMarker(this,MisNumber+MaxLock*setNumber));//マーカー出現
 				UnLock[MisNumber+MaxLock*setNumber] = false;
 				break;
@@ -2176,7 +2186,7 @@ void TOBJList::PlayStart()
 		HeroWeapon  =  Replayer->RepWType;
 
 		HeroHP = Replayer->SplitData.Life[NowStage];
-		MShipHP = Replayer->SplitData.Mship[NowStage];
+		MShipHP = Replayer->SplitData.MShip[NowStage];
 		RestMis = Replayer->SplitData.Missile[NowStage];
 	}
 	else {
@@ -2242,7 +2252,7 @@ void TOBJList::ReleaseBeforeReset()
 
 void TOBJList::InitAfterReset()
 {
-	//BGTex = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_DEFAULT);
+	//BGTex = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_DEFAULT);
 
 }
 
@@ -2267,7 +2277,7 @@ void TOBJList::ScreenShot()
 		sprintf_s(c, "%5d", i );
 		string FileNum(c);
 
-		string filename = "Screenshots/" + "CP" + FileNum + ".BMP";
+		string filename = string("Screenshots/") + string("CP") + FileNum + string(".BMP");
 		FILE *fp;
 		if ( (fp = fopen(filename.c_str(),"r")) != NULL ){
 			fclose( fp );
@@ -2357,11 +2367,7 @@ void TOBJList::InitBeforePlayStart()
 	LimitTime = 180000;
 	Distance = StartDistance;
 	RondomSeed = 1;
-	if( HeroWeapon == 0 )
-		((TJiki*)JikiObj)->ResetBeforeStart();
-	else
-		((TJiki2)JikiObj)->ResetBeforeStart();
-
+	JikiObj->ResetBeforeStart();
 }
 
 void TOBJList::TimeOver()
@@ -2493,7 +2499,6 @@ void TOBJList::OnLoaded( void* Sender )
 
 void TOBJList::LoadInternal()
 {
-//FName: String;
 //lbf: TFileStream;
 //i:Integer;
 //readversion:ShortInt;
@@ -2502,19 +2507,20 @@ void TOBJList::LoadInternal()
 
 	//3D背景管理クラス作成     （Loading画面表示中にメッシュを読み込ませたいため、この位置）
 	if( BG3DMan == NULL )
-		BG3DMan = new TBG3DManager();
+		BG3DMan = new TBG3DManager(this);
 
+	string FName;
 	switch(NowStage ) {
 		case 0:{
 			// テクスチャの生成
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
-			BGTex1 = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);      //背景
-			BGTex2 = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
-			BumpTex = new TDGTexture(QD,DGFMT_ARGB ,0,D3DPOOL_MANAGED);     //バンプテクスチャ               DGFMT_Bump
-			SunTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			DemoTex = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);
-			Enemy5Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);	// ボス
-			BossBump = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);	// ボスバンプ
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
+			BGTex1 = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);      //背景
+			BGTex2 = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
+			BumpTex = new TDGTexture(m_dddd,DGFMT_ARGB ,0,D3DPOOL_MANAGED);     //バンプテクスチャ               DGFMT_Bump
+			SunTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			DemoTex = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);
+			Enemy5Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);	// ボス
+			BossBump = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);	// ボスバンプ
 
 			//グラフィックデータ読み込み
 			std::ifstream ifs("./Data/Stage1.BIN");
@@ -2567,14 +2573,14 @@ void TOBJList::LoadInternal()
 		}break;
 		case 1:{
 			// テクスチャの生成
-			Eff6Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //雲
-			Eff7Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //海
-			BGTex2 = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
-			Enemy4Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
-			ST2Tex2 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //トンネル
-			DemoTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //潜水艦
-			Eff3Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //ワープ
+			Eff6Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //雲
+			Eff7Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //海
+			BGTex2 = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
+			Enemy4Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
+			ST2Tex2 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //トンネル
+			DemoTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //潜水艦
+			Eff3Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //ワープ
 
 			//グラフィックデータ読み込み
 			string FName  =  "./Data/Stage2.BIN";
@@ -2589,10 +2595,10 @@ void TOBJList::LoadInternal()
 			Eff3Tex->LoadFromFile("warp.bmp", FName);
 
 			//メッシュのロード
-			Board = new TSXMesh(QD);
-			CloudMesh = new TSXMesh(QD);
-			Undersea = new TSXMesh(QD);
-			Undersea2 = new TSXMesh(QD);
+			Board = new TSXMesh(m_dddd);
+			CloudMesh = new TSXMesh(m_dddd);
+			Undersea = new TSXMesh(m_dddd);
+			Undersea2 = new TSXMesh(m_dddd);
 
 			Board->LoadFromFile("sea.sx", FName);
 			CloudMesh->LoadFromFile("cloud.sx", FName);
@@ -2610,10 +2616,10 @@ void TOBJList::LoadInternal()
 		}break;
 		case 2:{
 			string FName  =  "./Data/Stage3.BIN";
-			MissileMesh = new TSXMesh(QD);
-			Eff6Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			MissileTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			MissileMesh = new TSXMesh(m_dddd);
+			Eff6Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			MissileTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
 
 			MissileMesh->LoadFromFile("Missile.sx", FName);
 			Eff6Tex->LoadFromFile("cloud0.bmp", FName);
@@ -2630,9 +2636,9 @@ void TOBJList::LoadInternal()
 		}break;
 		case 3:{
 			string FName  =  "./Data/Stage4.BIN";
-			Eff3Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //ワープ
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
-			Enemy4Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
+			Eff3Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //ワープ
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
+			Enemy4Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
 
 			Eff3Tex->LoadFromFile("warp.bmp", FName);
 			MechaTex->LoadFromFile("stage4enemy.bmp", FName);
@@ -2654,11 +2660,11 @@ void TOBJList::LoadInternal()
 		}break;
 		case 4:{
 			FName  =  "./Data/Stage5.BIN";
-			Eff6Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			Eff7Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
-			Enemy4Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
-			Enemy5Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //ボス
+			Eff6Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			Eff7Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //ザコ
+			Enemy4Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //中ボス
+			Enemy5Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //ボス
 
 			Eff6Tex->LoadFromFile("cloud0.bmp", FName);
 			Eff7Tex->LoadFromFile("stage5storm.bmp", FName);
@@ -2689,17 +2695,17 @@ void TOBJList::LoadInternal()
 		//タイトル画面
 		case 99:{
 			// テクスチャの生成
-			MechaTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //
-			BGTex1 = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);      //背景
-			BGTex2 = new TDGTexture(QD, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
-			BShotTex1 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			BShotTex2 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			BShotBumpTex1 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			BShotBumpTex2 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);
-			Eff6Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //雲
-			Eff7Tex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //海
-			ST2Tex1 = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //砂嵐
-			DemoTex = new TDGTexture(QD, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //カーソル
+			MechaTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);   //
+			BGTex1 = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);      //背景
+			BGTex2 = new TDGTexture(m_dddd, DGFMT_RGB,0,D3DPOOL_MANAGED);     //背景
+			BShotTex1 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			BShotTex2 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			BShotBumpTex1 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			BShotBumpTex2 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);
+			Eff6Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //雲
+			Eff7Tex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);      //海
+			ST2Tex1 = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //砂嵐
+			DemoTex = new TDGTexture(m_dddd, DGFMT_ARGB,0,D3DPOOL_MANAGED);  //カーソル
 
 
 			string FName  =  "./Data/Stage100.BIN";
@@ -2716,10 +2722,10 @@ void TOBJList::LoadInternal()
 			DemoTex->LoadFromFile("stageselect.bmp", FName);
 
 			//メッシュのロード
-			Board = new TSXMesh(QD);
-			CloudMesh = new TSXMesh(QD);
-			Undersea = new TSXMesh(QD);
-			Undersea2 = new TSXMesh(QD);
+			Board = new TSXMesh(m_dddd);
+			CloudMesh = new TSXMesh(m_dddd);
+			Undersea = new TSXMesh(m_dddd);
+			Undersea2 = new TSXMesh(m_dddd);
 
 			Board->LoadFromFile("sea.sx", FName);
 			CloudMesh->LoadFromFile("cloud.sx", FName);
@@ -2727,7 +2733,7 @@ void TOBJList::LoadInternal()
 			Undersea2->LoadFromFile("Undersea2.sx", FName);
 
 			for( s32 i = 0 ; i < NCube; i++ ) {
-				GCube[i] = new TSXMesh(QD);
+				GCube[i] = new TSXMesh(m_dddd);
 				GCube[i]->LoadFromFile("cube.sx", "./Data/Misc.BIN");
 			}
 

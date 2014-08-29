@@ -1251,7 +1251,7 @@ TSun2::TSun2(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	FKind = kBG;
 	//FlareOK = true;
 
-	MakeSpriteLite(QD, numSpr, X, Y, 320, 320, 25400, bmNormal);
+	MakeSpriteLite(numSpr, X, Y, 320, 320, 25400, bmNormal);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(SunTex,  128, 1, 255, 127);    // ƒeƒNƒXƒ`ƒƒ‚ð“o˜^
 	Sprite[numSpr-1]->GetSpr()->SetColor(128, ctAlpha);
 	Sprite[numSpr-1]->GetSpr()->SetColor(160, ctRed);
@@ -1261,14 +1261,14 @@ TSun2::TSun2(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	Sprite[numSpr-1]->GetSpr()->FCY += 160;
 	Sprite[numSpr-1]->GetSpr()->Move(X,Y);
 
-	MakeSpriteLite(QD, numSpr,X, Y, 1218,1218,25399,bmAdd);
+	MakeSpriteLite(numSpr, X,Y, 1218, 1218,25399,bmAdd);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(SunTex,  1, 1, 127, 127);    // ƒeƒNƒXƒ`ƒƒ‚ð“o˜^
 	Sprite[numSpr-1]->GetSpr()->SetColor(255, ctAlpha);
 	Sprite[numSpr-1]->GetSpr()->FCX += 609;
 	Sprite[numSpr-1]->GetSpr()->FCY += 609;
 	Sprite[numSpr-1]->GetSpr()->Move(X,Y);
 
-	MakeSpriteLite(QD, numSpr,X, Y, 190,190,25398,bmAdd);
+	MakeSpriteLite(numSpr, X,Y, 190, 190,25398,bmAdd);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(SunTex,  1, 1, 127, 127);    // ƒeƒNƒXƒ`ƒƒ‚ð“o˜^
 	Sprite[numSpr-1]->GetSpr()->SetColor(192, ctAlpha);
 	Sprite[numSpr-1]->GetSpr()->SetColor(160, ctRed);
@@ -1276,7 +1276,7 @@ TSun2::TSun2(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	Sprite[numSpr-1]->GetSpr()->FCY += 95;
 	Sprite[numSpr-1]->GetSpr()->Move(X,Y);
 
-	MakeSpriteLite(QD, numSpr,X, Y, 160,160,25397,bmAdd);
+	MakeSpriteLite(numSpr, X,Y, 160, 160,25397,bmAdd);
 	Sprite[numSpr-1]->GetSpr()->AddTexture(SunTex,  1, 128, 127, 255);    // ƒeƒNƒXƒ`ƒƒ‚ð“o˜^
 	Sprite[numSpr-1]->GetSpr()->SetColor(64, ctAlpha);
 	Sprite[numSpr-1]->GetSpr()->FCX += 80;
@@ -1404,7 +1404,7 @@ TCloudFast::TCloudFast(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	FKind = kEffect;
 
 
-	MakeSpriteLite(QD, numSpr,_x,_y,64,64,2000,bmNormal);
+	MakeSpriteLite(numSpr, _x,_y,64,64,2000,bmNormal);
 		Sprite[numSpr-1]->GetSpr()->AddTexture(Eff8Tex, 33, 129, 63, 159);
 		Sprite[numSpr-1]->GetSpr()->FCX += 32;
 		Sprite[numSpr-1]->GetSpr()->FCY += 32;
@@ -1442,7 +1442,7 @@ TSandStorm::TSandStorm(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	FKind = kEffect2;
 
 	for( s32 i = 0; i <= 7; i++ ) {
-		MakeSpriteLite(QD, numSpr,160*i,0,160,480,18000,bmMul);
+		MakeSpriteLite(numSpr, 160*i,0,160,480,18000,bmMul);
 
 
 		if(FOwner->NowStage==4 )
@@ -1456,7 +1456,7 @@ TSandStorm::TSandStorm(TOBJList* _owner, s32 _x, s32 _y) : TOBJ(_owner)
 	}
 
 	for( s32 i = 0; i <= 7; i++ ) {
-		MakeSpriteLite(QD, numSpr,96*i,0,96,480,8001,bmMul);
+		MakeSpriteLite(numSpr, 96*i,0,96,480,8001,bmMul);
 
 		if(FOwner->NowStage==4 )
 			Sprite[numSpr-1]->GetSpr()->AddTexture(Eff7Tex,   32*i, 64, 31+32*i, 192);

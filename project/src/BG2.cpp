@@ -568,8 +568,8 @@ TGlassCubeMaker::TGlassCubeMaker( TOBJList* _owner, s32 _pat ) : TOBJ(_owner)
 			for( s32 k = 0; k <= 2; k++ ) {
 				for( s32 i = 0; i <= 29; i++ ) {
 					SX = (f32)random(1000)/100.f +(f32)k*7.f;
-					SY = sintable[(i*140+70*k) & 0xfff]*(17+random(1000)/100);
-					SZ = costable[(i*140+70*k) & 0xfff]*(17+random(1000)/100);
+					SY = sint[(i*140+70*k) & 0xfff]*(17+random(1000)/100);
+					SZ = cost[(i*140+70*k) & 0xfff]*(17+random(1000)/100);
 					RX = random(256)-128;
 					RY = random(256)-128;
 					RZ = 1024+random(256)-128;
@@ -586,8 +586,8 @@ TGlassCubeMaker::TGlassCubeMaker( TOBJList* _owner, s32 _pat ) : TOBJ(_owner)
 		case 1:{
 			for( s32 i = 0; i <= 59; i++ ) {
 				SX = (f32)random(300)/100.f;
-				SY = sintable[(i*70) & 0xfff]*20;
-				SZ = costable[(i*70) & 0xfff]*20;
+				SY = sint[(i*70) & 0xfff]*20;
+				SZ = cost[(i*70) & 0xfff]*20;
 				RX = random(256)-128;
 				RY = random(256)-128;
 				RZ = 1024+random(256)-128;

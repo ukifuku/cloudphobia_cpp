@@ -1,0 +1,11 @@
+﻿2014/08/30 0:50:28 にビルドを開始しました。
+     1>ノード 2 上のプロジェクト "C:\Data\program\cloudphobia_cpp\project\Win32Project1.vcxproj" (ClCompile ターゲット)。
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDOWS /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt src\Font.cpp
+         スキップ中... (関連する変更は検出されませんでした)
+         Font.cpp
+     1>プロジェクト "C:\Data\program\cloudphobia_cpp\project\Win32Project1.vcxproj" (ClCompile ターゲット) のビルドが完了しました。
+
+ビルドに成功しました。
+
+経過時間 00:00:00.21

@@ -499,6 +499,7 @@ public:
 
 	TSXFrame* Ancestors(u32 _idx);
 	TSXFrame* Children(u32 _idx);
+	void ClearChildren();
 
 	//‰Â‹‘®«
 	TSXVisibility GetVisibility() { return FVisibility; }

@@ -532,9 +532,6 @@ struct EffectData //メッシュデータ
 s32		NewID = 0;
 u32		VFPSCount;
 
-f32		sintable[4096];
-f32		costable[4096];
-
 //インターフェース
 TDGCarad*	QD;
 TDDSD*		SD;
@@ -666,4 +663,6 @@ inline DWORD F2DW( FLOAT f ) { return *((DWORD*)&f); }
 void GetDate( s32& _year, s32& _mon, s32& _day );
 s32 BoolToInt(bool _val);
 bool IntToBool(s32 _val);
+glm::vec2 Random2D(f32 k);
+
 

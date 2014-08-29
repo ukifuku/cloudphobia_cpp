@@ -1,5 +1,7 @@
 #include "TOBJ.h"
 #include "TOBJList.h"
+#include "Sound.h"
+#include "Font.h"
 
 TOBJ::TOBJ( TOBJList* _owner )
 {
@@ -38,12 +40,12 @@ TOBJ::~TOBJ()
 	deleted = true;
 }
 
-void TOBJ::MakeSprite( TDGCarad& _dddd, TDGTexture& _Tex, s32 _num, s32 TX, s32 TY, s32 TW, s32 TH, s32 Z, s32 HX, s32 HY, s32 HW, s32 HH, s32 _cx, s32 _cy, bool com )
+void TOBJ::MakeSprite( TDGCarad* _dddd, TDGTexture* _Tex, s32 _num, s32 TX, s32 TY, s32 TW, s32 TH, s32 Z, s32 HX, s32 HY, s32 HW, s32 HH, s32 _cx, s32 _cy, bool com )
 {
 	TSpriteEXBLT sblt;
 	sblt.RBM      =  bmNormal;    // αブレンドモード
 	sblt.RColor   =  0xFFFFFFFF; // ポリゴン色
-	sblt.RDDDD    =  &_dddd;        // TDDDDの参照
+	sblt.RDDDD    =  _dddd;        // TDDDDの参照
 	sblt.RWidth   =  abs(TW);        // 幅
 	sblt.RHeight  =  abs(TH);        // 高さ
 	sblt.RX       =  0;         // X座標
@@ -56,7 +58,7 @@ void TOBJ::MakeSprite( TDGCarad& _dddd, TDGTexture& _Tex, s32 _num, s32 TX, s32 
 	numSpr++;
 
 	TSpriteEX* spr = Sprite[_num]->GetSpr();
-	spr->AddTexture(&_Tex, TX, TY, TX+TW, TY+TH);    // テクスチャを登録
+	spr->AddTexture(_Tex, TX, TY, TX+TW, TY+TH);    // テクスチャを登録
 	spr->FVisible  =  true;
 	if( HW+HH>0 ) {
 		spr->AddHitArea(glm::vec2(HX, HY), glm::vec2(HX, HY+HH), glm::vec2(HX+HW, HY+HH), glm::vec2(HX+HW, HY), htSky);
@@ -73,12 +75,12 @@ void TOBJ::MakeSprite( TDGCarad& _dddd, TDGTexture& _Tex, s32 _num, s32 TX, s32 
 
 }
 
-void TOBJ::MakeSpriteLite( TDGCarad* _dddd, s32 _num, s32 _x, s32 _y, s32 _w, s32 _h, s32 _z, TBlendMode _blend )
+void TOBJ::MakeSpriteLite( s32 _num, s32 _x, s32 _y, s32 _w, s32 _h, s32 _z, TBlendMode _blend )
 {
 	TSpriteEXBLT sblt;
 	sblt.RBM      =  _blend;    // αブレンドモード
 	sblt.RColor   =  0xFFFFFFFF; // ポリゴン色
-	sblt.RDDDD    =  _dddd;        // TDDDDの参照
+	sblt.RDDDD    =  FOwner->GetDG();        // TDDDDの参照
 	sblt.RWidth   =  abs(_w);        // 幅
 	sblt.RHeight  =  abs(_h);        // 高さ
 	sblt.RX       =  0;         // X座標
@@ -186,7 +188,7 @@ s32 TOBJ::GetAge()
 
 }
 
-void TOBJ::MakeSprFromID( TDGCarad& _dddd, s32 _id, TDGTexture& _tex, s32 _z, bool _extra )
+void TOBJ::MakeSprFromID( TDGCarad* _dddd, s32 _id, TDGTexture* _tex, s32 _z, bool _extra )
 {
 	s32 TWidth;
 	s32 THeight;
@@ -197,11 +199,11 @@ void TOBJ::MakeSprFromID( TDGCarad& _dddd, s32 _id, TDGTexture& _tex, s32 _z, bo
 		TWidth = data.TexRect.Right - data.TexRect.Left;
 		THeight = data.TexRect.Bottom - data.TexRect.Top;
 
-		MakeSpriteLite(_dddd, numSpr,0,0,TWidth,THeight, _z + data.Z*2, bmNormal);
+		MakeSpriteLite(numSpr, 0,0,TWidth,THeight,_z + data.Z*2, bmNormal);
 		FOwner->SpriteDataList[_id].Sprites[i].Spr = Sprite[numSpr-1];
 
 		TJoint* tmp = Sprite[numSpr-1];
-		tmp->GetSpr()->AddTexture(&_tex, data.TexRect.Left, data.TexRect.Top, data.TexRect.Right-1,data.TexRect.Bottom-1);
+		tmp->GetSpr()->AddTexture(_tex, data.TexRect.Left, data.TexRect.Top, data.TexRect.Right-1,data.TexRect.Bottom-1);
 		if( (data.HitRect[0].X - data.HitRect[3].X) != 0 ) {
 			tmp->GetSpr()->AddHitArea(data.HitRect[0], data.HitRect[1], data.HitRect[2], data.HitRect[3], htSky);
 			tmp->GetSpr()->FHit      =  true;
@@ -228,10 +230,10 @@ void TOBJ::MakeSprFromID( TDGCarad& _dddd, s32 _id, TDGTexture& _tex, s32 _z, bo
 			TWidth = data.TexRect.Right - data.TexRect.Left;
 			THeight = data.TexRect.Bottom - data.TexRect.Top;
 
-			MakeSpriteLite(_dddd, numSpr,0,0,TWidth,THeight,_z + data.Z*2 -1,bmNormal);
+			MakeSpriteLite(numSpr, 0,0,TWidth,THeight,_z + data.Z*2 -1,bmNormal);
 
 			TJoint* tmp = Sprite[numSpr-1];
-			tmp->GetSpr()->AddTexture(&_tex, data.TexRect.Left, data.TexRect.Top, data.TexRect.Right-1,data.TexRect.Bottom-1);
+			tmp->GetSpr()->AddTexture(_tex, data.TexRect.Left, data.TexRect.Top, data.TexRect.Right-1,data.TexRect.Bottom-1);
 
 			tmp->GetSpr()->FCX += data.CX;
 			tmp->GetSpr()->FCY += data.CY;
@@ -242,7 +244,7 @@ void TOBJ::MakeSprFromID( TDGCarad& _dddd, s32 _id, TDGTexture& _tex, s32 _z, bo
 			tmp->GetSpr()->SetColor(160,ctAlpha);
 			tmp->GetSpr()->FEffectNum = 1;
 			tmp->GetSpr()->FBumpSize = 2.9f;
-			tmp->GetSpr()->FBumpTex = &_tex;
+			tmp->GetSpr()->FBumpTex = _tex;
 			tmp->GetSpr()->FBumpLevel = 2.0f;
 			Sprite[i]->Add(Sprite[numSpr-1]);
 		}
